@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { deepseekChat, extractJson } from '@/lib/api/deepseek';
 import { globalRateLimiter, getClientIp } from '@/lib/api/rateLimit';
 
+// Vercel Serverless 函数最大执行时间（秒）
+export const maxDuration = 60;
+
 // 姓名测算 API（使用 DeepSeek，需要深度中文文化理解）
 export async function POST(req: Request) {
   const ip = getClientIp(req);

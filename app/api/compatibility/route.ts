@@ -2,24 +2,27 @@ import { NextResponse } from 'next/server';
 import { deepseekChat, extractJson } from '@/lib/api/deepseek';
 import { globalRateLimiter, getClientIp } from '@/lib/api/rateLimit';
 
+// Vercel Serverless 函数最大执行时间（秒）
+export const maxDuration = 60;
+
 // 合婚配对 API（使用 DeepSeek，需要复杂推理能力）
 export async function POST(req: Request) {
-    const ip = getClientIp(req);
-    if (!globalRateLimiter.check(ip)) {
-        return NextResponse.json({ error: '缘分天定不可急，请稍后再行合婚' }, { status: 429 });
+  const ip = getClientIp(req);
+  if (!globalRateLimiter.check(ip)) {
+    return NextResponse.json({ error: '缘分天定不可急，请稍后再行合婚' }, { status: 429 });
+  }
+
+  try {
+    const body = await req.json();
+    const { male, female } = body;
+
+    if (!male?.name || !male?.date || !male?.time || !female?.name || !female?.date || !female?.time) {
+      return NextResponse.json({ error: '请填写双方完整的出生信息' }, { status: 400 });
     }
 
-    try {
-        const body = await req.json();
-        const { male, female } = body;
+    const systemPrompt = `你是精通合婚命理的大师，擅长根据双方生辰八字进行配对分析。所有结论正向引导，即使不太匹配也要给出积极的改善建议，禁用"克妻""克夫""不合"等负面表述。`;
 
-        if (!male?.name || !male?.date || !male?.time || !female?.name || !female?.date || !female?.time) {
-            return NextResponse.json({ error: '请填写双方完整的出生信息' }, { status: 400 });
-        }
-
-        const systemPrompt = `你是精通合婚命理的大师，擅长根据双方生辰八字进行配对分析。所有结论正向引导，即使不太匹配也要给出积极的改善建议，禁用"克妻""克夫""不合"等负面表述。`;
-
-        const prompt = `
+    const prompt = `
 请对以下两人进行合婚配对分析：
 
 男方：
@@ -61,17 +64,17 @@ export async function POST(req: Request) {
 注意：所有分数为0-100整数。内容保持正向积极的态度。
 `;
 
-        const result = await deepseekChat(prompt, systemPrompt);
+    const result = await deepseekChat(prompt, systemPrompt);
 
-        const jsonStr = extractJson(result.choices[0].message.content);
-        const parsedData = JSON.parse(jsonStr);
-        return NextResponse.json(parsedData);
+    const jsonStr = extractJson(result.choices[0].message.content);
+    const parsedData = JSON.parse(jsonStr);
+    return NextResponse.json(parsedData);
 
-    } catch (error: any) {
-        console.error('Compatibility API Error:', error);
-        return NextResponse.json(
-            { error: '姻缘天机推演受阻，请稍后再试' },
-            { status: 500 }
-        );
-    }
+  } catch (error: any) {
+    console.error('Compatibility API Error:', error);
+    return NextResponse.json(
+      { error: '姻缘天机推演受阻，请稍后再试' },
+      { status: 500 }
+    );
+  }
 }

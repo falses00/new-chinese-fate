@@ -2,6 +2,9 @@ import { NextResponse } from 'next/server';
 import { deepseekChat, extractJson } from '@/lib/api/deepseek';
 import { globalRateLimiter, getClientIp } from '@/lib/api/rateLimit';
 
+// Vercel Serverless 函数最大执行时间（秒）
+export const maxDuration = 60;
+
 // 塔罗牌 22 张大阿尔卡那牌名
 const MAJOR_ARCANA = [
     '愚者', '魔术师', '女祭司', '女皇', '皇帝',
