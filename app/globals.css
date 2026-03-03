@@ -1,0 +1,107 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-white text-[#333333] font-body antialiased selection:bg-secondary selection:text-white;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-title font-normal tracking-wide text-primary;
+  }
+}
+
+/* 水墨背景纹理 */
+.pattern-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* 使用更加高级、柔和的渐变 + 宣纸质感底纹 */
+  background-color: #FAFAFA;
+  background-image:
+    radial-gradient(at 0% 0%, hsla(33, 52%, 92%, 1) 0, transparent 50%),
+    radial-gradient(at 50% 0%, hsla(13, 42%, 89%, 1) 0, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(34, 44%, 90%, 1) 0, transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  background-attachment: fixed;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 自定义毛玻璃效果类 */
+.glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-nav {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(232, 196, 144, 0.3);
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8C490;
+  border-radius: 2px;
+}
+
+/* ====== 3D 翻牌效果（塔罗牌用） ====== */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* ====== 飘落花瓣动效 ====== */
+@keyframes falling {
+  0% {
+    transform: translateY(-10%) translateX(0) rotate(0deg);
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(100vh) translateX(100px) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.petal {
+  position: fixed;
+  top: -20px;
+  pointer-events: none;
+  z-index: -1;
+  animation: falling linear infinite;
+  opacity: 0.15;
+  font-size: 16px;
+}
