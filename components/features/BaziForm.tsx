@@ -82,8 +82,8 @@ export const BaziForm = ({ onSubmitOverride, externalError }: BaziFormProps) => 
             </div>
 
             {/* 历法类型与日期 */}
-            <div className="flex space-x-4">
-                <div className="w-1/3 space-y-2">
+            <div className="flex flex-col sm:flex-row gap-4">
+                <div className="w-full sm:w-1/3 space-y-2">
                     <label className="block text-sm text-[#666666] tracking-wider">历法</label>
                     <select
                         value={formData.calendarType}
@@ -94,13 +94,13 @@ export const BaziForm = ({ onSubmitOverride, externalError }: BaziFormProps) => 
                         <option value="农历">农历</option>
                     </select>
                 </div>
-                <div className="w-2/3 space-y-2">
+                <div className="w-full sm:w-2/3 space-y-2 min-w-0">
                     <label className="block text-sm text-[#666666] tracking-wider">出生日期</label>
                     <input
                         type="date"
                         value={formData.date}
                         onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                        className="w-full h-11 px-4 bg-white/60 rounded-sm outline-none focus:ring-1 focus:ring-primary border border-[#E8C490]/50 transition-all"
+                        className="w-full h-11 px-3 bg-white/60 rounded-sm outline-none focus:ring-1 focus:ring-primary border border-[#E8C490]/50 transition-all max-w-full box-border"
                     />
                 </div>
             </div>
