@@ -55,7 +55,7 @@ export const qwenVlPlus = async (base64Image: string, systemPrompt: string = PAL
     const base64Url = base64Image.startsWith('data:image') ? base64Image : `data:image/jpeg;base64,${base64Image}`;
 
     const res = await client.post('/chat/completions', {
-      model: 'Qwen/Qwen-VL-Plus',
+      model: 'Qwen/Qwen2-VL-72B-Instruct',
       messages: [
         {
           role: 'user',
